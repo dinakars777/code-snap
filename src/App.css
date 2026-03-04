@@ -1,0 +1,250 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  height: 60px;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+.sidebar {
+  width: 320px;
+  border-left: 1px solid var(--border-glass);
+  background: rgba(15, 17, 21, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editor Section */
+.code-editor-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+textarea.raw-code-input {
+  flex: 1;
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+textarea.raw-code-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Control Panel Section */
+.controls-section {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.theme-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.theme-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+}
+
+.theme-btn.active {
+  border-color: white;
+}
+
+.export-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--text-main);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+.export-btn:hover {
+  opacity: 0.9;
+}
+
+.export-btn:active {
+  transform: scale(0.98);
+}
+
+/* Range Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--text-main);
+  cursor: pointer;
+  margin-top: -6px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: var(--bg-panel-hover);
+  border-radius: 2px;
+}
+
+/* Canvas Node (The Exportable Area) */
+.canvas-wrapper {
+  transition: padding 0.3s ease;
+  min-width: 400px;
+  max-width: 100%;
+}
+
+.mac-window {
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  background: #1e1e1e;
+  /* Fallback for shiki */
+  overflow: hidden;
+  position: relative;
+}
+
+.mac-window-header {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  /* very subtle header bar */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mac-traffic-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.mac-traffic-light.close {
+  background-color: #ff5f56;
+}
+
+.mac-traffic-light.minimize {
+  background-color: #ffbd2e;
+}
+
+.mac-traffic-light.maximize {
+  background-color: #27c93f;
+}
+
+.shiki-container {
+  padding: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.shiki-container pre {
+  margin: 0;
+  background: transparent !important;
+}
+
+.toast {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  background: var(--text-main);
+  color: var(--bg-dark);
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
