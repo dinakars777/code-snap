@@ -1,29 +1,52 @@
 # code-snap 📸
 
-> A gorgeous, glassmorphic code snippet beautifier built with React and Vite.
+> Turn messy code snippets into beautiful, shareable images — instantly.
 
-Create beautiful, stylized images of your code snippets instantly. Perfect for sharing on 𝕏 (Twitter), LinkedIn, or dev blogs. 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)](https://vitejs.dev)
+
+A gorgeous, glassmorphic code snippet beautifier built with React and Vite. Perfect for sharing on 𝕏 (Twitter), LinkedIn, or dev blogs.
+
+---
 
 ## Features
-- ✨ **Zero-config setup**
-- 🎨 **Beautiful Gradients:** 5 extremely satisfying preset backgrounds + a dark mode
-- 🧠 **Syntax Highlighting:** Powered by `shiki` for extreme accuracy and VS Code-like coloring
-- 📸 **High-Res Export:** Downloads a retina-ready (2x pixel ratio) PNG via `html-to-image`
-- 🖥️ **macOS Window Mode:** Wraps your code in a beautiful Mac-styled glassy terminal window
 
-## Tech Stack
-- React + TypeScript
-- Vite (for instant HMR and blazing fast builds)
-- Vanilla CSS (`backdrop-filter`, standard utility classes, heavy CSS variables)
-- `lucide-react` (icons)
+- ✨ **Zero-config** — paste code and go, no setup needed
+- 🎨 **Beautiful Gradients** — 5 preset backgrounds + dark mode
+- 🧠 **Syntax Highlighting** — powered by `shiki` for VS Code-accurate coloring
+- 📸 **High-Res Export** — retina-ready 2x PNG via `html-to-image`
+- 🖥️ **macOS Window Mode** — wraps your code in a glassy Mac-styled terminal frame
 
-## Quick Start
+---
+
+## 🚀 Getting Started
+
 ```bash
+git clone https://github.com/dinakars777/code-snap
+cd code-snap
 npm install
 npm run dev
 ```
 
-Open `http://localhost:5173` and start snapping!
+Open [http://localhost:5173](http://localhost:5173) and start snapping.
+
+---
+
+## Tech Stack
+
+| Tool | Purpose |
+|---|---|
+| React 19 + TypeScript | UI framework |
+| Vite | Build tool & dev server |
+| `shiki` | Syntax highlighting |
+| `html-to-image` | PNG export |
+| `lucide-react` | Icons |
+| Vanilla CSS | Glassmorphism styling |
+
+---
 
 ## License
+
 MIT
