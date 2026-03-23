@@ -196,6 +196,30 @@ input[type=range]::-webkit-slider-runnable-track {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.window-title {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.window-title-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.window-title-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .mac-traffic-light {
   width: 12px;
   height: 12px;
@@ -295,4 +319,29 @@ input[type=range]::-webkit-slider-runnable-track {
 
 .text-xs {
   font-size: 0.75rem;
+}
+
+.keyboard-shortcuts {
+  margin-top: -0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border-glass);
+  }
+
+  .workspace {
+    padding: 1rem;
+  }
+
+  .canvas-wrapper {
+    min-width: 300px;
+  }
 }

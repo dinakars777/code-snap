@@ -59,6 +59,8 @@ function App() {
   const [autoDetect, setAutoDetect] = useState(true);
   const [socialPreset, setSocialPreset] = useState('custom');
   const [copied, setCopied] = useState(false);
+  const [windowTitle, setWindowTitle] = useState('code.ts');
+  const [fontSize, setFontSize] = useState(14);
 
   const [htmlCode, setHtmlCode] = useState('');
   const [highlighter, setHighlighter] = useState<Highlighter | null>(null);
@@ -97,6 +99,25 @@ function App() {
       setHtmlCode('');
     }
   }, [code, highlighter, language]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        handleExport();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'c' && !window.getSelection()?.toString()) {
+        // Only trigger if no text is selected
+        if (document.activeElement?.tagName !== 'TEXTAREA' && document.activeElement?.tagName !== 'INPUT') {
+          e.preventDefault();
+          handleCopyImage();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [code, themeId, padding, language]);
 
   const activeTheme = THEMES.find((t) => t.id === themeId);
   const activePreset = SOCIAL_PRESETS.find((p) => p.id === socialPreset);
@@ -194,10 +215,12 @@ function App() {
                 <div className="mac-traffic-light close" />
                 <div className="mac-traffic-light minimize" />
                 <div className="mac-traffic-light maximize" />
+                <span className="window-title">{windowTitle}</span>
               </div>
 
               <div
                 className="shiki-container"
+                style={{ fontSize: `${fontSize}px` }}
                 dangerouslySetInnerHTML={{ __html: htmlCode || '<pre><code><span>Type your code...</span></code></pre>' }}
               />
             </div>
@@ -228,6 +251,17 @@ function App() {
           </div>
 
           <div className="controls-section glass-panel">
+
+            <div className="control-group">
+              <label className="control-label">Window Title</label>
+              <input
+                type="text"
+                className="window-title-input"
+                value={windowTitle}
+                onChange={(e) => setWindowTitle(e.target.value)}
+                placeholder="e.g. app.tsx"
+              />
+            </div>
 
             <div className="control-group">
               <label className="control-label">Language</label>
@@ -281,6 +315,21 @@ function App() {
 
             <div className="control-group">
               <div className="flex justify-between items-center">
+                <label className="control-label">Font Size</label>
+                <span className="control-label">{fontSize}px</span>
+              </div>
+              <input
+                type="range"
+                min="10"
+                max="24"
+                step="1"
+                value={fontSize}
+                onChange={(e) => setFontSize(Number(e.target.value))}
+              />
+            </div>
+
+            <div className="control-group">
+              <div className="flex justify-between items-center">
                 <label className="control-label">Padding</label>
                 <span className="control-label">{padding}px</span>
               </div>
@@ -312,12 +361,18 @@ function App() {
             <div className="flex gap-2">
               <button className="export-btn" onClick={handleCopyImage}>
                 {copied ? <Check size={18} /> : <Copy size={18} />}
-                Copy Image
+                Copy
               </button>
               <button className="export-btn" onClick={handleExport}>
                 <Download size={18} />
-                Download
+                Save
               </button>
+            </div>
+
+            <div className="keyboard-shortcuts">
+              <p className="text-xs" style={{ color: 'var(--text-muted)', textAlign: 'center', marginTop: '0.5rem' }}>
+                ⌘/Ctrl+S to save • ⌘/Ctrl+C to copy
+              </p>
             </div>
 
           </div>
