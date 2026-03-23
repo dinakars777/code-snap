@@ -1,17 +1,43 @@
 import { useState, useRef, useEffect } from 'react';
-import { Camera, Code2, Download } from 'lucide-react';
+import { Camera, Code2, Download, Copy, Check } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { createHighlighter, type Highlighter } from 'shiki';
 import './App.css';
 
 const THEMES = [
-  { id: 'sunset', bg: 'var(--grad-sunset)' },
-  { id: 'ocean', bg: 'var(--grad-ocean)' },
-  { id: 'aurora', bg: 'var(--grad-aurora)' },
-  { id: 'midnight', bg: 'var(--grad-midnight)' },
-  { id: 'candy', bg: 'var(--grad-candy)' },
-  { id: 'dark', bg: '#1f2937' },
+  { id: 'sunset', name: 'Sunset', bg: 'var(--grad-sunset)' },
+  { id: 'ocean', name: 'Ocean', bg: 'var(--grad-ocean)' },
+  { id: 'aurora', name: 'Aurora', bg: 'var(--grad-aurora)' },
+  { id: 'midnight', name: 'Midnight', bg: 'var(--grad-midnight)' },
+  { id: 'candy', name: 'Candy', bg: 'var(--grad-candy)' },
+  { id: 'dark', name: 'Dark', bg: '#1f2937' },
+  { id: 'forest', name: 'Forest', bg: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' },
+  { id: 'fire', name: 'Fire', bg: 'linear-gradient(135deg, #f12711 0%, #f5af19 100%)' },
+  { id: 'purple', name: 'Purple Haze', bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+  { id: 'rose', name: 'Rose', bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+  { id: 'cyber', name: 'Cyberpunk', bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+  { id: 'matrix', name: 'Matrix', bg: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)' },
 ];
+
+const SOCIAL_PRESETS = [
+  { id: 'twitter', name: 'Twitter Card', width: 1200, height: 675 },
+  { id: 'linkedin', name: 'LinkedIn', width: 1200, height: 627 },
+  { id: 'instagram', name: 'Instagram', width: 1080, height: 1080 },
+  { id: 'custom', name: 'Custom', width: 0, height: 0 },
+];
+
+// Simple language detection based on code patterns
+function detectLanguage(code: string): string {
+  if (code.includes('function') && code.includes('=>')) return 'typescript';
+  if (code.includes('const') || code.includes('let') || code.includes('var')) return 'javascript';
+  if (code.includes('def ') && code.includes(':')) return 'python';
+  if (code.includes('package ') || code.includes('func ')) return 'go';
+  if (code.includes('fn ') || code.includes('let mut')) return 'rust';
+  if (code.includes('public class') || code.includes('public static')) return 'java';
+  if (code.includes('<div') || code.includes('<html')) return 'html';
+  if (code.includes('{') && code.includes('color:')) return 'css';
+  return 'typescript'; // default
+}
 
 const DEFAULT_CODE = `function calculatePhysics(x: number, y: number) {
   const velocity = Math.sqrt(x * x + y * y);
@@ -28,6 +54,11 @@ function App() {
   const [themeId, setThemeId] = useState(THEMES[3].id);
   const [padding, setPadding] = useState(64);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [language, setLanguage] = useState('typescript');
+  const [autoDetect, setAutoDetect] = useState(true);
+  const [socialPreset, setSocialPreset] = useState('custom');
+  const [copied, setCopied] = useState(false);
 
   const [htmlCode, setHtmlCode] = useState('');
   const [highlighter, setHighlighter] = useState<Highlighter | null>(null);
@@ -39,39 +70,57 @@ function App() {
     async function init() {
       const hl = await createHighlighter({
         themes: ['vitesse-dark'],
-        langs: ['typescript', 'javascript', 'css', 'html']
+        langs: ['typescript', 'javascript', 'python', 'rust', 'go', 'java', 'css', 'html', 'json', 'bash']
       });
       setHighlighter(hl);
     }
     init();
   }, []);
 
-  // Update highlighted code when code changes
+  // Auto-detect language when code changes
+  useEffect(() => {
+    if (autoDetect && code) {
+      const detected = detectLanguage(code);
+      setLanguage(detected);
+    }
+  }, [code, autoDetect]);
+
+  // Update highlighted code when code or language changes
   useEffect(() => {
     if (highlighter && code) {
       const html = highlighter.codeToHtml(code, {
-        lang: 'typescript',
+        lang: language as any,
         theme: 'vitesse-dark'
       });
       setHtmlCode(html);
     } else if (!code) {
       setHtmlCode('');
     }
-  }, [code, highlighter]);
+  }, [code, highlighter, language]);
 
   const activeTheme = THEMES.find((t) => t.id === themeId);
+  const activePreset = SOCIAL_PRESETS.find((p) => p.id === socialPreset);
+
+  const showToastMessage = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   const handleExport = async () => {
     if (!canvasRef.current) return;
 
     try {
-      // Temporarily hide the toast to ensure it doesn't get caught in the screenshot
       setShowToast(false);
 
       const dataUrl = await toPng(canvasRef.current, {
         quality: 1,
-        pixelRatio: 2, // High resolution
-        skipFonts: true, // Speeds up generation if fonts are loaded differently
+        pixelRatio: 2,
+        skipFonts: true,
+        ...(socialPreset !== 'custom' && activePreset && {
+          width: activePreset.width,
+          height: activePreset.height,
+        }),
       });
 
       const link = document.createElement('a');
@@ -79,10 +128,40 @@ function App() {
       link.href = dataUrl;
       link.click();
 
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      showToastMessage('Downloaded code-snap.png ✨');
     } catch (err) {
       console.error('Failed to generate image', err);
+      showToastMessage('Failed to export image ❌');
+    }
+  };
+
+  const handleCopyImage = async () => {
+    if (!canvasRef.current) return;
+
+    try {
+      setShowToast(false);
+
+      const dataUrl = await toPng(canvasRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        skipFonts: true,
+      });
+
+      // Convert data URL to blob
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+
+      // Copy to clipboard
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob })
+      ]);
+
+      setCopied(true);
+      showToastMessage('Copied to clipboard! 📋');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy image', err);
+      showToastMessage('Failed to copy image ❌');
     }
   };
 
@@ -125,7 +204,7 @@ function App() {
           </div>
 
           <div className={`toast ${showToast ? 'show' : ''}`}>
-            Downloaded code-snap.png ✨
+            {toastMessage}
           </div>
         </section>
 
@@ -151,6 +230,40 @@ function App() {
           <div className="controls-section glass-panel">
 
             <div className="control-group">
+              <label className="control-label">Language</label>
+              <div className="flex gap-2 items-center">
+                <select
+                  className="language-select"
+                  value={language}
+                  onChange={(e) => {
+                    setLanguage(e.target.value);
+                    setAutoDetect(false);
+                  }}
+                  disabled={autoDetect}
+                >
+                  <option value="typescript">TypeScript</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="rust">Rust</option>
+                  <option value="go">Go</option>
+                  <option value="java">Java</option>
+                  <option value="css">CSS</option>
+                  <option value="html">HTML</option>
+                  <option value="json">JSON</option>
+                  <option value="bash">Bash</option>
+                </select>
+                <label className="flex items-center gap-1 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={autoDetect}
+                    onChange={(e) => setAutoDetect(e.target.checked)}
+                  />
+                  Auto
+                </label>
+              </div>
+            </div>
+
+            <div className="control-group">
               <label className="control-label">Background</label>
               <div className="theme-presets">
                 {THEMES.map((t) => (
@@ -159,7 +272,8 @@ function App() {
                     className={`theme-btn ${themeId === t.id ? 'active' : ''}`}
                     style={{ background: t.bg }}
                     onClick={() => setThemeId(t.id)}
-                    aria-label={`Select ${t.id} theme`}
+                    aria-label={`Select ${t.name} theme`}
+                    title={t.name}
                   />
                 ))}
               </div>
@@ -180,10 +294,31 @@ function App() {
               />
             </div>
 
-            <button className="export-btn" onClick={handleExport}>
-              <Download size={18} />
-              Export Image
-            </button>
+            <div className="control-group">
+              <label className="control-label">Social Preset</label>
+              <select
+                className="language-select"
+                value={socialPreset}
+                onChange={(e) => setSocialPreset(e.target.value)}
+              >
+                {SOCIAL_PRESETS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} {p.width > 0 && `(${p.width}×${p.height})`}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-2">
+              <button className="export-btn" onClick={handleCopyImage}>
+                {copied ? <Check size={18} /> : <Copy size={18} />}
+                Copy Image
+              </button>
+              <button className="export-btn" onClick={handleExport}>
+                <Download size={18} />
+                Download
+              </button>
+            </div>
 
           </div>
 

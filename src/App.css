@@ -248,3 +248,51 @@ input[type=range]::-webkit-slider-runnable-track {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
+
+/* Language Select */
+.language-select {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.875rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.language-select:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.language-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Utility Classes */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
