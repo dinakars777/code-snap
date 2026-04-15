@@ -194,6 +194,14 @@ function App() {
           <Camera size={24} color="#00f2fe" />
           code-snap
         </h1>
+        <a 
+          href="https://github.com/dinakars777/code-snap" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="star-button"
+        >
+          ⭐ Star on GitHub
+        </a>
       </header>
 
       {/* MAIN CONTENT */}
