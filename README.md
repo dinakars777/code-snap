@@ -1,6 +1,6 @@
 # code-snap 📸
 
-> Turn messy code snippets into beautiful, shareable images — instantly.
+> Turn code snippets into shareable images.
 
 🔗 **[Live Demo](https://dinakars777.github.io/code-snap/)**
 
@@ -9,17 +9,17 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)](https://vitejs.dev)
 
-A gorgeous, glassmorphic code snippet beautifier built with React and Vite. Perfect for sharing on 𝕏 (Twitter), LinkedIn, or dev blogs.
+Code snippet beautifier with glassmorphic styling. Built with React and Vite. Good for sharing on Twitter, LinkedIn, or dev blogs.
 
 ---
 
 ## Features
 
-- ✨ **Zero-config** — paste code and go, no setup needed
-- 🎨 **Beautiful Gradients** — 5 preset backgrounds + dark mode
-- 🧠 **Syntax Highlighting** — powered by `shiki` for VS Code-accurate coloring
-- 📸 **High-Res Export** — retina-ready 2x PNG via `html-to-image`
-- 🖥️ **macOS Window Mode** — wraps your code in a glassy Mac-styled terminal frame
+- ✨ **Zero-config** — paste code and go
+- 🎨 **5 Gradient Backgrounds** — plus dark mode
+- 🧠 **Syntax Highlighting** — `shiki` for VS Code-accurate colors
+- 📸 **High-Res Export** — 2x PNG via `html-to-image`
+- 🖥️ **macOS Window Mode** — Mac-styled terminal frame
 
 ---
 
